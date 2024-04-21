@@ -32,7 +32,7 @@ function App() {
         <Route path='/register' element={<Register></Register>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
 
-        <Route path='/' element={<PrivateRoute isAuthentication={true}><Home></Home></PrivateRoute>}></Route>
+        <Route path='/' element={<PrivateRoute isAuthentication={token ? true : false}><Home></Home></PrivateRoute>}></Route>
 
       </Routes>
     </>

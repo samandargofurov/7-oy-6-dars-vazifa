@@ -27,6 +27,8 @@ function Register() {
   };
 
   function validate() {
+
+
     return true;
   }
 
@@ -99,24 +101,7 @@ function Register() {
                 type="password"
                 placeholder="Minimum 3 characters"
               />
-              {/* <FaRegEye className="text-2xl cursor-pointer opacity-50" /> */}
-              {user.visible ? (
-                <FaRegEye
-                  className="text-2xl cursor-pointer opacity-50"
-                  onClick={() => {
-                    handleShow(() => {
-                      handleShow("hide", user);
-                    });
-                  }}
-                ></FaRegEye>
-              ) : (
-                <FaRegEyeSlash
-                  className="text-2xl cursor-pointer opacity-50"
-                  onClick={() => {
-                    handleShow("show", user);
-                  }}
-                ></FaRegEyeSlash>
-              )}
+              <FaRegEye className="text-2xl cursor-pointer opacity-50" />
             </div>
           </div>
 
