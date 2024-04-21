@@ -1,17 +1,14 @@
 import { IoMoonOutline } from "react-icons/io5";
+import { FaRegEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
 import userIcon from "../assets/userIcon.svg";
 import googleIcon from "../assets/googleIcon.svg";
 import sms from "../assets/emailIcon.svg";
 import lock from "../assets/lockIcon.svg";
 import { NavLink, useNavigate } from "react-router-dom";
-import { createContext, useRef, useState } from "react";
+import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../redux/usersSlice";
-
-import "./Register.css";
-
-export const ThemeContext = createContext(null);
 
 function Register() {
   const nameRef = useRef(null);
@@ -21,46 +18,29 @@ function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function validate(name, email, password, repassword) {
-    if (name.trim().length < 3) {
-      alert("name is empty");
-      return false;
-    }
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
 
-    if (email.trim().length < 3) {
-      alert("email is empty");
-      return false;
-    }
-
-    if (!Number(password)) {
-      alert("password is empty");
-      return false;
-    }
-
-    if (password < 0 || password > 3) {
-      alert("name is empty");
-      return false;
-    }
-
-    if (password != repassword) {
-      alert("password or repassword is empty");
-      return false;
-    }
-
+  function validate() {
     return true;
   }
 
   function handleClick(e) {
     e.preventDefault();
 
-    const isValid = validate("name, email, password");
+    const isValid = validate();
 
     if (isValid) {
       const user = {
         name: nameRef.current.value,
         email: emailRef.current.value,
         password: passwordRef.current.value,
-        repasswordRef: repasswordRef.current.value,
+        repassword: repasswordRef.current.value,
       };
 
       dispatch(register(user));
@@ -117,9 +97,26 @@ function Register() {
                 ref={passwordRef}
                 className="w-96 outline-none bg-transparent"
                 type="password"
-                placeholder="Minimum 8 characters"
+                placeholder="Minimum 3 characters"
               />
-              <FaRegEye className="text-2xl cursor-pointer opacity-50" />
+              {/* <FaRegEye className="text-2xl cursor-pointer opacity-50" /> */}
+              {user.visible ? (
+                <FaRegEye
+                  className="text-2xl cursor-pointer opacity-50"
+                  onClick={() => {
+                    handleShow(() => {
+                      handleShow("hide", user);
+                    });
+                  }}
+                ></FaRegEye>
+              ) : (
+                <FaRegEyeSlash
+                  className="text-2xl cursor-pointer opacity-50"
+                  onClick={() => {
+                    handleShow("show", user);
+                  }}
+                ></FaRegEyeSlash>
+              )}
             </div>
           </div>
 
@@ -131,7 +128,7 @@ function Register() {
                 ref={repasswordRef}
                 className="w-96 outline-none bg-transparent"
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="Re-enter Password"
               />
               <FaRegEye className="text-2xl cursor-pointer opacity-50" />
             </div>
