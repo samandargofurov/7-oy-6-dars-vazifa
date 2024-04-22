@@ -6,7 +6,7 @@ import googleIcon from "../assets/googleIcon.svg";
 import sms from "../assets/emailIcon.svg";
 import lock from "../assets/lockIcon.svg";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { register } from "../redux/usersSlice";
 
@@ -17,6 +17,8 @@ function Register() {
   const repasswordRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [ type, setType ] = useState('password');
+  const [ icon, setIcon ] = useState('FaRegEyeSlash')
 
   const validateEmail = (email) => {
     return String(email)
@@ -52,6 +54,16 @@ function Register() {
       repasswordRef.current.value = null;
 
       navigate("/login");
+    }
+  }
+
+  function handleToggle() {
+    if(type === 'password' || !icon) {
+      setIcon(FaRegEyeSlash);
+      setType('text')
+    } else {
+      setIcon(FaRegEye);
+      setType('password');
     }
   }
 
@@ -93,15 +105,14 @@ function Register() {
 
           <div className="flex flex-col">
             <label htmlFor="name">Choose Password</label>
-            <div className="flex gap-2 border rounded-lg py-3 px-3 mt-2">
+            <div className="flex gap-2 items-center border rounded-lg py-3 px-3 mt-2">
               <img src={lock} alt="" />
-              <input
-                ref={passwordRef}
-                className="w-96 outline-none bg-transparent"
-                type="password"
-                placeholder="Minimum 3 characters"
-              />
-              <FaRegEye className="text-2xl cursor-pointer opacity-50" />
+              <input ref={passwordRef} className="w-96 outline-none bg-transparent" type={type} placeholder="Minimum 3 characters" />
+              <span onClick={handleToggle}>
+                {
+                  icon ? <FaRegEye className="text-lg cursor-pointer opacity-40" /> : <FaRegEyeSlash className="text-lg cursor-pointer opacity-40" />
+                }
+              </span>
             </div>
           </div>
 
@@ -115,7 +126,6 @@ function Register() {
                 type="password"
                 placeholder="Re-enter Password"
               />
-              <FaRegEye className="text-2xl cursor-pointer opacity-50" />
             </div>
           </div>
 

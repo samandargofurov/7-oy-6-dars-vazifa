@@ -1,12 +1,13 @@
 import { IoMoonOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa";
+import { FaRegEyeSlash } from "react-icons/fa";
 import googleIcon from '../assets/googleIcon.svg'
 import lock from '../assets/lockIcon.svg'
 import sms from '../assets/emailIcon.svg'
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { add } from '../redux/tokenSlice';
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 function Login() {
   const emailRef = useRef(null);
@@ -14,6 +15,8 @@ function Login() {
   const users = useSelector(state => state.users.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [ type, setType ] = useState('password');
+  const [ icon, setIcon ] = useState('FaRegEyeSlash')
 
   function Click(e) {
     e.preventDefault();
@@ -32,6 +35,16 @@ function Login() {
     emailRef.current.value = null,
     passwordRef.current.value = null
 
+  }
+
+  function handleToggle() {
+    if(type === 'password' || !icon) {
+      setIcon(FaRegEye);
+      setType('text')
+    } else {
+      setIcon(FaRegEyeSlash);
+      setType('password');
+    }
   }
 
   return (
@@ -54,10 +67,14 @@ function Login() {
 
             <div className="flex flex-col">
               <label htmlFor="name">Choose Password</label>
-              <div className="flex gap-2 border rounded-lg py-3 px-3 mt-2">
+              <div className="flex gap-2 items-center border rounded-lg py-3 px-3 mt-2">
                 <img src={lock} alt="" />
-                <input ref={passwordRef} className="w-96 outline-none bg-transparent" type="password" placeholder="Minimum 3 characters" />
-                <FaRegEye className="text-2xl cursor-pointer opacity-50" />
+                <input ref={passwordRef} className="w-96 outline-none bg-transparent" type={type} placeholder="Minimum 3 characters" />
+              <span onClick={handleToggle}>
+                {
+                  icon ? <FaRegEye className="text-lg cursor-pointer opacity-40" /> : <FaRegEyeSlash className="text-lg cursor-pointer opacity-40" />
+                }
+              </span>
               </div>
             </div>
 
